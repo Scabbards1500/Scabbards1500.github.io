@@ -1,0 +1,27 @@
+{
+  "type": "research",
+  "date": "May 2026",
+  "title": "ForeSight: Enhancing Risk Monitoring via Early Safety Signal Distillation",
+  "subtitle": "Forecasting Harmful Responses from First-Token Hidden States",
+  "authors": "Hanling Wang, Chenlong Wei, Hanyan Niu, Qi Cao, Shizhou Huang, YangYang, Xiaohui Zhu*, Yao Zhu*",
+  "status": "EMNLP Findings: Accepted",
+  "statusKind": "accepted",
+  "keywords": [
+    "Large Language Models",
+    "AI Safety",
+    "Harmfulness Forecasting",
+    "Early Risk Detection",
+    "Safety Signal Distillation"
+  ],
+  "links": [
+    {
+      "label": "paper",
+      "href": "https://arxiv.org/abs/2609.13737"
+    },
+    {
+      "label": "code",
+      "href": "https://github.com/Scabbards1500/Foresight"
+    }
+  ],
+  "cover": "cover.png"
+}

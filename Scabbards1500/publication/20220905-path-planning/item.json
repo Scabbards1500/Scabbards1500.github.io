@@ -1,0 +1,24 @@
+{
+  "type": "research",
+  "date": "Sep 2022",
+  "title": "Path Planning of Autonomous Pollination Using Heredity Algorithm for Intelligent Agriculture",
+  "subtitle": "Heredity Algorithm path planning for Pollination robot",
+  "authors": "Zhaochen Wang, Xiaoyan Gao, Hanling Wang, Yi Chen*",
+  "status": "ICiMR 2023: Accepted",
+  "statusKind": "accepted",
+  "keywords": [
+    "Path planning",
+    "Heredity algorithm"
+  ],
+  "links": [
+    {
+      "label": "paper",
+      "href": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=l3DCtDkAAAAJ&citation_for_view=l3DCtDkAAAAJ:9yKSN-GCB0IC"
+    },
+    {
+      "label": "code",
+      "href": "https://github.com/Scabbards1500/Matlab-toolbox-based-on-Heredity-Algorithm"
+    }
+  ],
+  "cover": "cover.png"
+}

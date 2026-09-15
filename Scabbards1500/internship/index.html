@@ -8,7 +8,7 @@
     <link rel="icon" href="../assets/img/tuxdo.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
-  <body>
+  <body data-catalog="./catalog.json">
     <div class="site">
       <div class="site-shell">
         <aside class="sidebar">
@@ -48,57 +48,7 @@
             </section>
 
             <section class="post-wrap">
-              <div class="post-list">
-                <article class="post-card" style="animation-delay: 0ms">
-                  <div class="post-body">
-                    <div>
-                      <div class="post-meta">
-                        <span class="post-type">Internship</span>
-                        <span class="post-date">Jan 2026</span>
-                      </div>
-                      <h2>RuiTian</h2>
-                      <p class="post-subtitle">NLP AI Engineer Intern</p>
-                    </div>
-                    <div class="post-content">
-                      <ul>
-                        <li>Built graph-augmented RAG pipelines with Milvus, achieving 100% file-level recall and reducing latency from 64.3s to 36.8s on financial documents.</li>
-                        <li>Developed entropy-regularized zero-shot GRPO for sample-efficient LLM training, matching baseline performance with 75% fewer rollouts on math datasets.</li>
-                        <li>Improved financial information extraction, raising temporal extraction accuracy from 69.0% to 93.0% and stock code accuracy from 54.5% to 97.9%.</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="post-thumb">
-                    <div class="post-thumb-frame">
-                      <img data-lightbox src="../assets/img/internship/20260119Ruitian-icon.jpeg" alt="RuiTian" />
-                    </div>
-                  </div>
-                </article>
-
-                <article class="post-card" style="animation-delay: 50ms">
-                  <div class="post-body">
-                    <div>
-                      <div class="post-meta">
-                        <span class="post-type">Internship</span>
-                        <span class="post-date">Aug 2025</span>
-                      </div>
-                      <h2>Pharmolix</h2>
-                      <p class="post-subtitle">AI Developer Intern</p>
-                    </div>
-                    <div class="post-content">
-                      <ul>
-                        <li>Built a Milvus–FastAPI hybrid retrieval system with query rewriting and chunk-level fusion for document QA.</li>
-                        <li>Developed a PDF-grounded annotation tool enabling accurate chunk-to-document alignment.</li>
-                        <li>Constructed a LightRAG-based knowledge graph for context-aware retrieval across large corpora.</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="post-thumb">
-                    <div class="post-thumb-frame">
-                      <img data-lightbox src="../assets/img/internship/20250501Pharmolix-icon.jpg" alt="Pharmolix" />
-                    </div>
-                  </div>
-                </article>
-              </div>
+              <div class="post-list" data-item-list></div>
             </section>
           </main>
         </div>

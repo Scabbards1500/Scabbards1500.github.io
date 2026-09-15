@@ -1,0 +1,27 @@
+{
+  "type": "research",
+  "date": "Sep 2024",
+  "title": "LLMarking: Adaptive Automatic Short-Answer Grading Using Large Language Models",
+  "subtitle": "Auto short answer grading using LLM",
+  "authors": "Hanling Wang, Banghao Chi, Yufei Wu, Kexin Chen, Di Wu, Songning Liu, Yiwei Li, Hanyan Niu, Xiaohui Zhu*",
+  "status": "ACM Learning@Scale: Accepted",
+  "statusKind": "accepted",
+  "keywords": [
+    "Large Language Model",
+    "Key Point Scoring",
+    "Natural Language Processing",
+    "Prompt Engineering",
+    "Automatic Grading"
+  ],
+  "links": [
+    {
+      "label": "paper",
+      "href": "https://dl.acm.org/doi/abs/10.1145/3698205.3729551"
+    },
+    {
+      "label": "code",
+      "href": "https://github.com/2024-Surf-LLMarking/LLMarking"
+    }
+  ],
+  "cover": "cover.jpg"
+}

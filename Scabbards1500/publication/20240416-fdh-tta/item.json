@@ -1,0 +1,25 @@
+{
+  "type": "research",
+  "date": "Apr 2024",
+  "title": "FDH-TTA: Fourier-Domain Harmonization for Test-Time Adaptation in Multicenter Medical Image Segmentation",
+  "subtitle": "Doman adaptation based on Fourier Transfer",
+  "authors": "Hanling Wang, Di Wu, Yingjuan Li, Chenglong Wei, Yao Zhu*, Bo Ni*",
+  "status": "Biomedical Signal Processing and Control: Accepted",
+  "statusKind": "accepted",
+  "keywords": [
+    "Test-time Adaptation",
+    "Medical Image Segmentation",
+    "DomainAdaptation"
+  ],
+  "links": [
+    {
+      "label": "paper",
+      "href": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5740985"
+    },
+    {
+      "label": "code",
+      "href": "https://github.com/Scabbards1500/FDH-TTA"
+    }
+  ],
+  "cover": "cover.png"
+}

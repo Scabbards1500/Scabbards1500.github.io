@@ -1,0 +1,14 @@
+{
+  "type": "awards",
+  "date": "Aug 2024",
+  "title": "Miccai Feta2024 Challenge 3rd Award",
+  "subtitle": "Multi-stage segmentation solution",
+  "authors": "Jingwen Jiang, Chensheng Zhang, Hanling Wang, Xuezhi Zhang, Jiarui Cao, Lyuyang Tong*, Bo Du*",
+  "links": [
+    {
+      "label": "paper",
+      "href": "https://arxiv.org/abs/2505.02784"
+    }
+  ],
+  "cover": "cover.jpg"
+}

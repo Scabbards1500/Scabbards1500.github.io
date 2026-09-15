@@ -1,0 +1,18 @@
+{
+  "type": "research",
+  "date": "Jan 2026",
+  "title": "SyRHM: Symbolic Reasoning with Retrieval for Zero-shot Harmful Meme Detection",
+  "subtitle": "Meme hateful content detection through Symbolic CoT",
+  "authors": "Hanling Wang, Chenlong Wei, Yingjian Li, Di Wu, Yuchao Zhang, Xiaohui Zhu*, Yao Zhu*",
+  "status": "EMNLP: Accepted",
+  "statusKind": "accepted",
+  "keywords": [
+    "Large Language Model",
+    "Symbolic Reasoning",
+    "Neuro-Symbolic AI",
+    "Multimodal Representation Learning",
+    "Harmful Content Detection"
+  ],
+  "links": [],
+  "cover": "cover.png"
+}

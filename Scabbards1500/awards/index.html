@@ -8,7 +8,7 @@
     <link rel="icon" href="../assets/img/tuxdo.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
-  <body>
+  <body data-catalog="./catalog.json">
     <div class="site">
       <div class="site-shell">
         <aside class="sidebar">
@@ -48,48 +48,7 @@
             </section>
 
             <section class="post-wrap">
-              <div class="post-list">
-                <article class="post-card" style="animation-delay: 0ms">
-                  <div class="post-body">
-                    <div>
-                      <div class="post-meta">
-                        <span class="post-type">Awards</span>
-                        <span class="post-date">Jun 2025</span>
-                      </div>
-                      <h2>Tencent Light Creative Camp Best Creative Award</h2>
-                      <p class="post-subtitle">A biodiversity science popularization mini-program based on LLM</p>
-                    </div>
-                    <p class="post-author">Environmental Science Team</p>
-                  </div>
-                  <div class="post-thumb">
-                    <div class="post-thumb-frame">
-                      <img data-lightbox src="../assets/img/awards/TencentLight2025-award.jpg" alt="Tencent Light Creative Camp Best Creative Award" />
-                    </div>
-                  </div>
-                </article>
-
-                <article class="post-card" style="animation-delay: 50ms">
-                  <div class="post-body">
-                    <div>
-                      <div class="post-meta">
-                        <span class="post-type">Awards</span>
-                        <span class="post-date">Aug 2024</span>
-                      </div>
-                      <h2>Miccai Feta2024 Challenge 3rd Award</h2>
-                      <p class="post-subtitle">Multi-stage segmentation solution</p>
-                    </div>
-                    <p class="post-author">Jingwen Jiang, Chensheng Zhang, Hanling Wang, Xuezhi Zhang, Jiarui Cao, Lyuyang Tong*, Bo Du*</p>
-                    <div class="post-actions">
-                      <a href="https://arxiv.org/abs/2505.02784" target="_blank" rel="noopener noreferrer">paper</a>
-                    </div>
-                  </div>
-                  <div class="post-thumb">
-                    <div class="post-thumb-frame">
-                      <img data-lightbox src="../assets/img/awards/MiccaiFeta2024-Certificate.jpg" alt="Miccai Feta2024 Challenge 3rd Award" />
-                    </div>
-                  </div>
-                </article>
-              </div>
+              <div class="post-list" data-item-list></div>
             </section>
           </main>
         </div>
