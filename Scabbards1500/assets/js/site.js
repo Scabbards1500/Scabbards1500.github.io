@@ -20,7 +20,7 @@
   }
 
   function fetchJson(url) {
-    return fetch(url).then(function (response) {
+    return fetch(url, { cache: "no-store" }).then(function (response) {
       if (!response.ok) throw new Error("Failed to load " + url);
       return response.json();
     });

@@ -230,6 +230,16 @@ img {
   font-size: 1rem !important;
 }
 
+.welcome-bio a {
+  color: var(--sky);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.welcome-bio a:hover {
+  color: #0c4a6e;
+}
+
 .home-sections {
   display: flex;
   max-width: 64rem;
