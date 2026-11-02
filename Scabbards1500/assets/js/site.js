@@ -145,10 +145,16 @@
     return card;
   }
 
+  function publicationVenue(item) {
+    if (item.type !== "research" || !item.status) return "";
+    return item.status.replace(/\s*:\s*(Accepted|Under Review|Preparing)\s*$/i, "");
+  }
+
   function renderHomeItem(item, sectionHref) {
     var title = sectionHref
       ? h("h4", {}, [h("a", { href: sectionHref + "#" + item.slug }, [item.title])])
       : h("h4", {}, [item.title]);
+    var venue = publicationVenue(item);
     var links =
       item.type === "internship"
         ? null
@@ -166,12 +172,7 @@
       item.type !== "internship" && item.authors
         ? h("p", { class: "home-author" }, [item.authors])
         : null,
-      item.type === "research" && item.status
-        ? h("p", { class: "home-status" }, [
-            h("strong", {}, ["Status:"]),
-            " " + item.status,
-          ])
-        : null,
+      venue ? h("p", { class: "home-venue" }, [venue]) : null,
       links,
     ]);
   }
@@ -309,8 +310,11 @@
       var href = section.getAttribute("data-home-href") || "";
       loadItems(section.getAttribute("data-home-catalog"))
         .then(function (items) {
+          var visible = items.filter(function (item) {
+            return item.type !== "research" || item.statusKind === "accepted";
+          });
           listRoot.replaceChildren();
-          items.forEach(function (item) {
+          visible.forEach(function (item) {
             listRoot.appendChild(renderHomeItem(item, href));
           });
         })
