@@ -213,9 +213,16 @@ img {
 }
 
 @media (min-width: 768px) {
+  /* keep the photo above the block */
+  .avatar-slot {
+    position: relative;
+    z-index: 1;
+  }
+
   .side-info::before {
-    /* once the photo has gone and the block is parked, it reaches the top edge */
-    inset: calc(-1.7rem - var(--s, 0) * 1.3rem) auto -1.25rem 50%;
+    /* runs from the top edge of the sidebar, behind the photo while it is
+       there (3rem padding + the photo slot and its gap, which shrink with --s) */
+    inset: calc(-3rem - (1 - var(--s, 0)) * 11.5rem) auto -1.25rem 50%;
     width: 17.5rem;
     border-radius: 0;
     translate: -50% 0;
