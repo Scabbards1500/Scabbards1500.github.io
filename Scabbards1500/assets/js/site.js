@@ -390,6 +390,20 @@
   function initDecor() {
     initAvatar();
     injectPatterns();
+    var sidebar = document.querySelector(".sidebar");
+    if (sidebar && !sidebar.querySelector(".avatar-birds")) {
+      var avatarBirds = h("span", { class: "sidebar-birds avatar-birds", "aria-hidden": "true" });
+      avatarBirds.appendChild(icon("gull"));
+      avatarBirds.appendChild(icon("bird"));
+      sidebar.appendChild(avatarBirds);
+    }
+    document.querySelectorAll(".side-info, .social-nav").forEach(function (panel) {
+      if (panel.querySelector(".sidebar-birds")) return;
+      var birds = h("span", { class: "sidebar-birds", "aria-hidden": "true" });
+      birds.appendChild(icon("gull"));
+      birds.appendChild(icon("bird"));
+      panel.appendChild(birds);
+    });
     hydrateIcons(document);
 
     document.querySelectorAll(".home-section").forEach(function (section, index) {
@@ -620,7 +634,7 @@
   }
 
   function renderCard(item, index) {
-    var title = h(headingTag(item.type), {}, [item.title]);
+    var title = h(headingTag(item.type), {}, [h("span", { class: "post-title-highlight" }, [item.title])]);
     var subtitle = item.subtitle ? h("p", { class: "post-subtitle" }, [item.subtitle]) : null;
     var pills =
       item.keywords.length > 0
@@ -913,6 +927,97 @@
     });
   }
 
+  // Keep the sidebar and its scroll animation alive across local pages.
+  function resolvePageUrls(scope, base) {
+    ["href", "src", "data-home-catalog", "data-home-href"].forEach(function (attr) {
+      scope.querySelectorAll("[" + attr + "]").forEach(function (el) {
+        var value = el.getAttribute(attr);
+        if (value) el.setAttribute(attr, new URL(value, base).href);
+      });
+    });
+  }
+
+  function bindNavigation() {
+    var nav = document.querySelector(".top-nav nav");
+    var routes = Array.from(nav.querySelectorAll("a"), function (a) { return new URL(a.href).pathname; });
+    var serial = 0;
+    history.scrollRestoration = "manual";
+
+    function navigationTop() {
+      // The content column starts below the profile on mobile; unlike the
+      // sticky header's rect, its position stays stable while scrolling.
+      var column = document.querySelector(".content-col");
+      return window.matchMedia("(max-width: 767px)").matches && column
+        ? Math.max(0, column.getBoundingClientRect().top + window.scrollY) : 0;
+    }
+
+    async function navigate(url, push) {
+      var ticket = ++serial;
+      var main = document.querySelector("main.main");
+      try {
+        var response = await fetch(url.href);
+        if (!response.ok) throw new Error("Page unavailable");
+        var page = new DOMParser().parseFromString(await response.text(), "text/html");
+        var next = page.querySelector("main.main");
+        if (!next) throw new Error("Missing main content");
+        resolvePageUrls(page, url.href);
+        if (ticket !== serial) return;
+        // Scroll the existing scene back, so the character returns naturally too.
+        var destination = navigationTop();
+        window.scrollTo({ top: destination, behavior: reduceMotion ? "instant" : "smooth" });
+        await new Promise(function (resolve) {
+          var start = performance.now();
+          function check() {
+            if (Math.abs(window.scrollY - destination) < 2 || performance.now() - start > 900) resolve();
+            else requestAnimationFrame(check);
+          }
+          check();
+        });
+        if (ticket !== serial) return;
+        if (!reduceMotion) {
+          await main.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 140, fill: "forwards" }).finished;
+        }
+        if (ticket !== serial) { main.getAnimations().forEach(function (a) { a.cancel(); }); return; }
+        if (push) history.pushState(null, "", url.href);
+        document.title = page.title;
+        var description = document.querySelector('meta[name="description"]');
+        var nextDescription = page.querySelector('meta[name="description"]');
+        if (description && nextDescription) description.content = nextDescription.content;
+        var catalog = page.body.getAttribute("data-catalog");
+        if (catalog) document.body.setAttribute("data-catalog", new URL(catalog, url.href).href);
+        else document.body.removeAttribute("data-catalog");
+        main.replaceWith(next);
+        nav.replaceChildren.apply(nav, Array.from(page.querySelector(".top-nav nav").childNodes));
+        pendingReveals = pendingReveals.filter(function (el) { return el.isConnected; });
+        layers = layers.filter(function (el) { return el.isConnected; });
+        window.scrollTo({ top: navigationTop(), behavior: "instant" });
+        initDecor();
+        registerLayers(next);
+        renderHome();
+        renderListPage();
+        requestScrollUpdate();
+        if (!reduceMotion) next.animate([{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 240, easing: "ease-out" });
+      } catch (error) {
+        if (ticket === serial) location.assign(url.href);
+      }
+    }
+
+    document.addEventListener("click", function (event) {
+      var link = event.target.closest("a[href]");
+      if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
+      var url = new URL(link.href);
+      if (url.origin !== location.origin || routes.indexOf(url.pathname) < 0 || url.search) return;
+      if (url.pathname === location.pathname && url.hash) return;
+      event.preventDefault();
+      if (url.pathname === location.pathname && !url.hash) {
+        window.scrollTo({ top: navigationTop(), behavior: reduceMotion ? "instant" : "smooth" });
+      } else navigate(url, true);
+    });
+    window.addEventListener("popstate", function () { navigate(new URL(location.href), false); });
+  }
+
+  resolvePageUrls(document, location.href);
+  bindNavigation();
   initDecor();
   initScroll();
   bindLightbox();
