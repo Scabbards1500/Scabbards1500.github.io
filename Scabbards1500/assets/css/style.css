@@ -1390,13 +1390,13 @@ img {
   min-width: 13rem;
   flex-direction: column;
   gap: 0.35rem;
-  padding: 0.9rem 1.5rem 1rem 1.1rem;
+  padding: 0.4rem 1.65rem 0.4rem 0.9rem;
   border-left: 3px solid var(--sky);
   background: #203e78;
   color: #fff;
   border-top: 1px solid #203e78;
   border-bottom: 1px solid #203e78;
-  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%);
 }
 
 .hero-card b {
@@ -1424,7 +1424,7 @@ img {
 }
 
 .hero-card::after {
-  content: "";
+  content: none;
   position: absolute;
   right: 0.6rem;
   bottom: 0.6rem;
@@ -2102,4 +2102,247 @@ img {
     left: 3rem;
     right: 3rem;
   }
+}
+
+/* Day/night controls and celestial night palette. */
+.top-nav { padding-right: 2.75rem; }
+.theme-toggle {
+  position: absolute; right: 0.6rem; top: 0.7rem;
+  width: 2rem; height: 2rem; display: grid; place-items: center;
+  border: 1px solid var(--border); border-radius: 50%;
+  background: var(--bg-white); color: var(--sky); font: 1.3rem/1 Arial;
+  cursor: pointer; transition: background-color 200ms, color 200ms;
+}
+.theme-toggle:hover { background: var(--sky-soft); }
+.theme-toggle:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-page: #080f20; --bg-main: #0d172b; --bg-white: #101c33;
+  --text: #e7edfa; --text-muted: #bac8e1; --text-soft: #a4b5d3;
+  --text-faint: #8298bb; --border: #2b3d5c;
+  --sky: #9db9ff; --sky-text: #abc4ff; --sky-soft: #243757;
+  --sky-deep: #c3d3ff; --bp: #91adf3;
+  --yellow-bg: #42361c; --yellow-text: #ffe2a0;
+  --blue-bg: #203559; --blue-text: #c3d8ff;
+  --green-bg: #193c35; --green-text: #ace8cd;
+}
+[data-theme="dark"] .top-nav { background: rgb(13 23 43 / 0.93); }
+[data-theme="dark"] .sidebar { background: #101c33; }
+[data-theme="dark"] .side-info::before,
+[data-theme="dark"] .social-nav::before { background: #1c2c4a; }
+[data-theme="dark"] .post-card { background: #111e35; border-color: #607db7; }
+[data-theme="dark"] .post-card:hover,
+[data-theme="dark"] .post-card:focus-within { border-color: #b1c6ff; }
+[data-theme="dark"] .post-title-highlight { background-image: linear-gradient(#314d7c, #314d7c); }
+[data-theme="dark"] .keyword-pill,
+[data-theme="dark"] .post-actions a,
+[data-theme="dark"] .filter-chip,
+[data-theme="dark"] .post-thumb-frame { background-color: #1b2b46; border-color: #405777; }
+[data-theme="dark"] .filter-chip.active { background: #9db9ff; color: #101c33; }
+[data-theme="dark"] .top-nav a.active { color: #0d172b; }
+[data-theme="dark"] .hero-card { background: #263f6b; border-color: #6081c8; }
+[data-theme="dark"] .hero {
+  background:
+    radial-gradient(circle at 75% 24%, #778bc955 0 1px, transparent 2px) 0 0 / 101px 93px,
+    radial-gradient(circle at 20% 65%, #c0d1ff55 0 1px, transparent 2px) 0 0 / 163px 139px,
+    radial-gradient(ellipse at 85% 10%, #243d66, transparent 65%), #0d172b;
+}
+[data-theme="dark"] .fx-mark { -webkit-text-stroke-color: #829ed42b; }
+[data-theme="dark"] .fx-slab-alt { background: #253b5c55; }
+[data-theme="dark"] .sidebar-birds { color: #abc4ff; }
+[data-theme="dark"] svg.celestial-icon,
+[data-theme="dark"] svg.celestial-icon path {
+  fill: none; stroke: #b6c9ff; stroke-width: 1.2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+[data-theme="dark"] .fx-ring { border-color: #91adf366; }
+[data-theme="dark"] .fx-ring::after { border-color: #c1d0ff55; }
+[data-theme="dark"] .oc-disc { background: #203756; }
+@keyframes celestial-orbit { to { rotate: 360deg; } }
+@keyframes celestial-pulse { 0%,100% { opacity: 0.45; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme="dark"] .fx-ring { animation: celestial-orbit 80s linear infinite; }
+  [data-theme="dark"] .fx-bird svg,
+  [data-theme="dark"] .sidebar-birds svg { animation: celestial-pulse 5s ease-in-out infinite; }
+  [data-theme="dark"] .fx-cloudline svg { animation: celestial-pulse 7s ease-in-out infinite; }
+}
+@media (max-width: 767px) {
+  .top-nav { padding-right: 2.2rem; }
+  .theme-toggle { right: 0.3rem; top: 0.85rem; width: 1.75rem; height: 1.75rem; }
+  .top-nav nav { gap: 0.1rem; padding-inline: 0.2rem; font-size: clamp(0.55rem, 2.5vw, 0.85rem); }
+  .top-nav a { padding-inline: 0.25rem; }
+}
+[data-theme="dark"] .oc-reveal {
+  --gulls: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 40' preserveAspectRatio='none'%3E%3Cpath d='M0 40V29Q75 12 150 26T300 23V40Z M32 3L35 11L43 14L35 17L32 25L29 17L21 14L29 11Z M206 1L209 9L217 12L209 15L206 23L203 15L195 12L203 9Z'/%3E%3C/svg%3E");
+}
+
+/* Black-sky edition: shaded rotating planets, travelling meteors, phased stars. */
+:root[data-theme="dark"] {
+  --bg-page: #000; --bg-main: #050505; --bg-white: #080808;
+  --border: #303036; --text: #eeeeef; --text-muted: #c7c7cc;
+  --text-soft: #aaaab3; --text-faint: #85858f; --sky-soft: #242429;
+}
+[data-theme="dark"] .sidebar { background: #080808; }
+[data-theme="dark"] .top-nav { background: rgb(5 5 5 / 94%); }
+[data-theme="dark"] .side-info::before,
+[data-theme="dark"] .social-nav::before { background: #171719; }
+[data-theme="dark"] .main,
+[data-theme="dark"] .hero { background: #050505; }
+[data-theme="dark"] .post-card { background: #101012; border-color: #585866; }
+[data-theme="dark"] .hero-card { background: #24242b; border-color: #686879; }
+[data-theme="dark"] .keyword-pill,
+[data-theme="dark"] .post-actions a,
+[data-theme="dark"] .filter-chip,
+[data-theme="dark"] .post-thumb-frame { background-color: #1b1b20; border-color: #3e3e48; }
+[data-theme="dark"] .filter-chip.clean { background: #25252c; }
+[data-theme="dark"] .filter-chip:hover { background: #34343f; }
+[data-theme="dark"] .post-title-highlight { background-image: linear-gradient(#363641, #363641); }
+[data-theme="dark"] .fx-slab,
+[data-theme="dark"] .fx-slab-alt { background: linear-gradient(135deg, #ffffff05, #ffffff01); }
+[data-theme="dark"] .oc-disc { background: #24242a; }
+.night-dust { display: none; position: absolute; inset: 0; pointer-events: none; }
+[data-theme="dark"] .night-dust { display: block; }
+.night-dust i { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; opacity: .5; box-shadow: 0 0 5px #ddd8ff80; }
+.night-dust i:nth-child(4n) { width: 3px; height: 3px; }
+[data-theme="dark"] svg.planet-art,
+[data-theme="dark"] svg.meteor-art { overflow: visible; animation: none; }
+[data-theme="dark"] svg.planet-art .planet-sphere { stroke: #e0d9ce88; stroke-width: .6; }
+[data-theme="dark"] svg.planet-art .planet-surface { transform-origin: 80px 60px; }
+[data-theme="dark"] svg.planet-art .planet-surface path,
+[data-theme="dark"] svg.planet-art .planet-surface ellipse { fill: none; stroke: #e3d8c3; stroke-width: .8; opacity: .4; }
+[data-theme="dark"] svg.planet-art .planet-orbit { fill: none; stroke: #c9c5d1; stroke-width: .65; opacity: .42; }
+[data-theme="dark"] svg.planet-art .planet-ring-front { fill: none; stroke: #e0d7c6; stroke-width: 1.4; opacity: .85; }
+[data-theme="dark"] svg.planet-art .planet-satellite circle { fill: #e1dcce; stroke: none; }
+.planet-satellite { transform-origin: 80px 60px; }
+[data-theme="dark"] svg.meteor-art .meteor-guide { stroke: #bfc0d9; stroke-width: .4; opacity: .2; fill: none; }
+[data-theme="dark"] svg.meteor-art .meteor-tail { stroke-width: 1.5; fill: none; }
+[data-theme="dark"] svg.meteor-art .meteor-head { fill: #fff; stroke: none; filter: drop-shadow(0 0 3px #d6d5ff); }
+.meteor-flight { offset-path: path('M5 67Q84 59 189 10'); offset-rotate: 0deg; offset-distance: 64%; }
+@keyframes planet-turn { from { transform: rotate(-12deg); } to { transform: rotate(348deg); } }
+@keyframes satellite-turn { to { transform: rotate(360deg); } }
+@keyframes meteor-travel {
+  0%, 55% { offset-distance: 0%; opacity: 0; }
+  59% { opacity: 1; }
+  76% { offset-distance: 100%; opacity: 0; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+@keyframes star-breathe { 0%,100% { opacity: .12; transform: scale(.65); } 48% { opacity: .95; transform: scale(1.25); } }
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme="dark"] .planet-surface { animation: planet-turn 34s linear infinite; }
+  [data-theme="dark"] .planet-satellite { animation: satellite-turn 24s linear infinite; }
+  [data-theme="dark"] .meteor-flight { animation: meteor-travel 8s linear infinite; }
+  [data-theme="dark"] .fx-cloudline .meteor-flight { animation-delay: -4s; animation-duration: 11s; }
+  [data-theme="dark"] .fx-field:nth-child(2n) .meteor-flight { animation-delay: -2s; }
+  [data-theme="dark"] .night-dust i { animation: star-breathe var(--twinkle) ease-in-out var(--phase) infinite; }
+}
+/* Flat celestial illustrations: solid disks and graphic linework. */
+[data-theme="dark"] svg.planet-art .planet-sphere { fill: #19191e; stroke: #b6c9ff; stroke-width: 1.2; }
+[data-theme="dark"] svg.planet-art .planet-surface path { stroke: #b6c9ff; stroke-width: 1; opacity: .45; }
+[data-theme="dark"] svg.planet-art .planet-ring-front { stroke: #b6c9ff; stroke-width: 1.2; }
+[data-theme="dark"] svg.planet-art .planet-orbit { stroke: #b6c9ff; opacity: .45; }
+[data-theme="dark"] svg.planet-art .planet-satellite circle { fill: #b6c9ff; }
+
+/* Polaris: concentric arcs sharing one fixed pole and one angular velocity. */
+.polar-trails { display: none; position: absolute; width: clamp(22rem, 58vw, 44rem); height: auto; left: 76%; top: 30%; transform: translate(-50%, -50%); pointer-events: none; }
+[data-theme="dark"] .polar-trails { display: block; opacity: .55; }
+.polar-orbits { transform-origin: 300px 300px; }
+.polar-orbits circle { fill: none; stroke: #aebde1; stroke-width: .8; }
+.polar-orbits .polar-star { fill: #e3e8ff; stroke: none; }
+.polar-origin { fill: #eef1ff; stroke: none; }
+@keyframes polar-rotation { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme="dark"] .polar-orbits { animation: polar-rotation 180s linear infinite; }
+  [data-theme="dark"] .polar-star { animation: star-breathe 6s ease-in-out var(--phase) infinite; transform-box: fill-box; transform-origin: center; }
+}
+@media (max-width: 767px) {
+  .polar-trails { left: 84%; top: 24%; width: 28rem; }
+  [data-theme="dark"] .polar-trails { opacity: .35; }
+}
+
+/* Falling meteors and dense, independently twinkling star clusters. */
+[data-theme="dark"] svg.meteor-art .meteor-guide { display: none; }
+.meteor-flight { offset-path: path('M185 5L25 76'); }
+[data-theme="dark"] .fx-cloud > span,
+[data-theme="dark"] .fx-cloudline > span { animation: none; transform: none; }
+[data-theme="dark"] svg.star-cluster-art { overflow: visible; }
+[data-theme="dark"] svg.star-cluster-art circle,
+[data-theme="dark"] svg.star-cluster-art path { fill: #e2e8ff; stroke: none; }
+.night-dust i { width: 1px; height: 1px; box-shadow: none; }
+.night-dust i:nth-child(4n) { width: 2px; height: 2px; }
+.night-dust i:nth-child(11n) { width: 3px; height: 3px; }
+[data-theme="dark"] .fx-ring:not(.polar-trails) { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme="dark"] svg.star-cluster-art circle,
+  [data-theme="dark"] svg.star-cluster-art path { animation: star-breathe 5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  [data-theme="dark"] svg.star-cluster-art :nth-child(2) { animation-delay: -2s; animation-duration: 7s; }
+  [data-theme="dark"] svg.star-cluster-art :nth-child(3) { animation-delay: -4s; animation-duration: 9s; }
+  [data-theme="dark"] svg.star-cluster-art :nth-child(4) { animation-delay: -1s; animation-duration: 6s; }
+}
+[data-theme="dark"] .hero-card {
+  background: #93aefa;
+  border-color: #93aefa;
+  color: #101526;
+}
+
+/* Reveal the new theme from the top, like a falling night curtain. */
+html.theme-curtain::view-transition-old(root),
+html.theme-curtain::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: none;
+}
+html.theme-curtain::view-transition-old(root) { z-index: 1; }
+html.theme-curtain::view-transition-new(root) {
+  z-index: 2;
+  animation: theme-nightfall 900ms cubic-bezier(.4, 0, .2, 1) both;
+}
+@keyframes theme-nightfall {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.theme-curtain::view-transition-new(root) { animation: none; }
+}
+
+/* Flat artificial satellites: solar panels, instruments and a dish antenna. */
+.fx-satellite { display: none; width: clamp(9rem, 19vw, 16rem); height: auto; transform: translate(-50%, -50%); opacity: .75; }
+[data-theme="dark"] .fx-satellite { display: block; }
+.satellite-drift { display: block; transform: rotate(var(--sat-tilt)); }
+.fx-satellite svg { display: block; width: 100%; height: auto; overflow: visible; }
+[data-theme="dark"] .fx-satellite svg path { stroke: #aabfe9; stroke-width: 1.2; stroke-linejoin: round; fill: none; }
+[data-theme="dark"] .fx-satellite svg .sat-panel { fill: #182437; }
+[data-theme="dark"] .fx-satellite svg .sat-grid { stroke: #7c98c4; stroke-width: .75; }
+[data-theme="dark"] .fx-satellite svg .sat-body { fill: #343338; stroke: #d3cfbf; }
+[data-theme="dark"] .fx-satellite svg .sat-dish { fill: #23232b; stroke: #d3cfbf; }
+[data-theme="dark"] .fx-satellite svg .sat-detail { stroke: #d3cfbf; stroke-width: .85; }
+[data-theme="dark"] .fx-satellite svg .sat-signal { opacity: .45; }
+@keyframes satellite-float {
+  from { transform: translateY(-7px) rotate(calc(var(--sat-tilt) - 3deg)); }
+  to { transform: translateY(7px) rotate(calc(var(--sat-tilt) + 3deg)); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme="dark"] .satellite-drift { animation: satellite-float 12s ease-in-out infinite alternate; }
+  [data-theme="dark"] .sat-signal { animation: celestial-pulse 4s ease-in-out infinite; }
+}
+@media (max-width: 767px) {
+  .fx-satellite { width: 9rem; opacity: .4; }
+  .hero .fx-satellite { --x: 85% !important; --y: 76% !important; }
+}
+
+[data-theme="dark"] .satellite-extra { width: clamp(7rem, 14vw, 11rem); opacity: .35; }
+[data-theme="dark"] .polar-extra { width: clamp(18rem, 36vw, 28rem); opacity: .2; }
+@media (prefers-reduced-motion: no-preference) {
+  .satellite-extra .satellite-drift { animation-delay: -6s; animation-duration: 17s; }
+  .polar-extra .polar-orbits { animation-delay: -65s; }
+}
+@media (max-width: 767px) {
+  [data-theme="dark"] .satellite-extra { width: 7rem; opacity: .22; }
+  [data-theme="dark"] .polar-extra { width: 20rem; opacity: .13; }
+}
+
+[data-theme="dark"] .satellite-extra { width: var(--sat-size, 8rem); }
+@media (prefers-reduced-motion: no-preference) {
+  .satellite-extra .satellite-drift { animation-delay: var(--sat-delay, -6s); animation-duration: var(--sat-duration, 17s); }
+}
+@media (max-width: 767px) {
+  [data-theme="dark"] .satellite-extra { width: calc(var(--sat-size, 8rem) * .7); }
 }

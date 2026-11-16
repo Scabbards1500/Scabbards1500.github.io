@@ -2,6 +2,9 @@
   var root = document.documentElement;
   var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   if (!reduceMotion) root.classList.add("motion");
+  try {
+    root.dataset.theme = localStorage.getItem("site-theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  } catch (error) { root.dataset.theme = "light"; }
 
   /* ---------------- Masked reveal ---------------- */
 
@@ -38,6 +41,18 @@
 
   var SVG_NS = "http://www.w3.org/2000/svg";
   var ICONS = {
+    satellite: {
+      viewBox: "0 0 240 160",
+      parts: [
+        ["sat-link", "M45 80H195"],
+        ["sat-panel", "M12 48H79V109H12ZM161 48H228V109H161Z"],
+        ["sat-grid", "M34 48V109M57 48V109M12 68H79M12 89H79M183 48V109M206 48V109M161 68H228M161 89H228"],
+        ["sat-body", "M100 57H140V101H100Z"],
+        ["sat-detail", "M108 65H132V73H108ZM110 81H130M110 88H124M120 101V120M111 120H129"],
+        ["sat-dish", "M107 40Q120 62 133 40ZM120 40V29M116 29H124M120 51V57"],
+        ["sat-signal", "M105 24Q120 11 135 24M98 16Q120 -2 142 16"],
+      ],
+    },
     bird: {
       viewBox: "0 0 40 18",
       d: "M1 9.5C6.5 3.5 12 3 20 10.5 28 3 33.5 3.5 39 9.5 33.5 7.6 27 9 20 15.5 13 9 6.5 7.6 1 9.5Z",
@@ -71,11 +86,40 @@
     },
   };
 
+  var NIGHT_ICONS = {
+    bird: { viewBox: "0 0 40 40", d: "M20 2L24 15L38 20L24 24L20 38L16 24L2 20L16 15Z" },
+    gull: { viewBox: "0 0 100 60", d: "M38 30a12 12 0 1 0 24 0a12 12 0 1 0-24 0M5 47C-4 34 91 4 96 16C105 29 9 59 5 47Z" },
+    cloud: { viewBox: "0 0 100 60", d: "M14 47Q35 3 89 12M21 54Q43 13 94 22M34 49Q55 27 86 30M67 6L70 15L79 18L70 21L67 30L64 21L55 18L64 15Z" },
+    cloudline: { viewBox: "0 0 120 40", d: "M3 35L85 9M25 37L98 14M86 3L89 10L97 12L89 15L86 23L83 15L75 12L83 10Z" },
+    feather: { viewBox: "0 0 50 60", d: "M6 49L17 27L34 36L44 8M3 49h6M6 46v6M14 27h6M17 24v6M31 36h6M34 33v6M41 8h6M44 5v6" }
+  };
+
+  var celestialId = 0;
+  function detailedCelestial(name, svg) {
+    var id = "planet-" + (++celestialId);
+    svg.setAttribute("viewBox", "0 0 160 120");
+    if (name === "gull" || name === "bird" || name === "feather") {
+      svg.classList.add("star-cluster-art");
+      svg.innerHTML = '<circle cx="44" cy="32" r="1.4"/><circle cx="106" cy="77" r="2"/><circle cx="126" cy="24" r="1"/><path d="M78 43L80 51L88 53L80 55L78 63L76 55L68 53L76 51Z"/>';
+    } else if (name === "cloud" || name === "cloudline") {
+      svg.classList.add("meteor-art");
+      svg.setAttribute("viewBox", "0 0 200 80");
+      svg.innerHTML = '<defs><linearGradient id="' + id + '-trail"><stop stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#e3e6ff"/></linearGradient></defs>' +
+        '<path class="meteor-guide" d="M185 5L25 76"/>' +
+        '<g class="meteor-flight"><path class="meteor-tail" style="stroke:url(#' + id + '-trail)" d="M65 -29L0 0"/><circle class="meteor-head" r="1.8"/></g>';
+    } else return false;
+    return true;
+  }
+
   function icon(name) {
-    var spec = ICONS[name];
+    var night = root.dataset.theme === "dark";
+    var spec = (night && NIGHT_ICONS[name]) || ICONS[name];
     var svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("data-sky-icon", name);
+    if (night) svg.classList.add("celestial-icon");
     svg.setAttribute("viewBox", spec.viewBox);
     svg.setAttribute("aria-hidden", "true");
+    if (night && detailedCelestial(name, svg)) return svg;
     (spec.parts || [["", spec.d]]).forEach(function (part) {
       var path = document.createElementNS(SVG_NS, "path");
       if (part[0]) path.setAttribute("class", part[0]);
@@ -405,7 +449,6 @@
       panel.appendChild(birds);
     });
     hydrateIcons(document);
-
     document.querySelectorAll(".home-section").forEach(function (section, index) {
       var heading = section.querySelector("h3");
       var name = heading ? heading.textContent.trim().toUpperCase() : "";
@@ -424,7 +467,99 @@
       wrap.appendChild(top);
     });
 
+    document.querySelectorAll(".fx-field").forEach(function (field, fieldIndex) {
+      if (field.querySelector(".night-dust")) return;
+      var dust = h("div", { class: "night-dust", "aria-hidden": "true" });
+      for (var i = 0; i < 56; i++) {
+        var star = h("i", {});
+        star.style.cssText = "left:" + ((i * 61.803 + fieldIndex * 11) % 98) + "%;top:" + ((i * 43.719 + 9) % 97) + "%;--twinkle:" + (3 + i % 5) + "s;--phase:-" + (i * 0.73) + "s";
+        dust.appendChild(star);
+      }
+      field.appendChild(dust);
+    });
+
+    document.querySelectorAll(".hero > .fx-field, .page-intro > .fx-field, .post-wrap > .fx-field:not(.fx-over)").forEach(function (field, index) {
+      if (field.querySelector(".fx-satellite")) return;
+      var satellite = h("span", { class: "fx fx-satellite", "data-depth": "0.12" });
+      satellite.style.cssText = "--x:" + (index ? "88%" : "80%") + ";--y:" + (index ? "20rem" : "62%") + ";--sat-tilt:" + (index ? "18deg" : "-18deg");
+      var craft = h("span", { class: "satellite-drift" });
+      craft.appendChild(icon("satellite"));
+      satellite.appendChild(craft);
+      field.appendChild(satellite);
+    });
+
+    var sky = document.querySelector(".hero > .fx-field, .page-intro > .fx-field");
+    if (sky && !sky.querySelector(".polar-trails")) {
+      var polar = document.createElementNS(SVG_NS, "svg");
+      polar.setAttribute("class", "polar-trails");
+      polar.setAttribute("viewBox", "0 0 600 600");
+      polar.setAttribute("aria-hidden", "true");
+      var orbit = document.createElementNS(SVG_NS, "g");
+      orbit.setAttribute("class", "polar-orbits");
+      // A single angular velocity preserves the shared celestial pole.
+      for (var ring = 0; ring < 16; ring++) {
+        var radius = 35 + ring * 16;
+        var phase = ring * 47;
+        var group = document.createElementNS(SVG_NS, "g");
+        group.setAttribute("transform", "rotate(" + phase + " 300 300)");
+        var trail = document.createElementNS(SVG_NS, "circle");
+        trail.setAttribute("cx", "300"); trail.setAttribute("cy", "300");
+        trail.setAttribute("r", String(radius));
+        trail.setAttribute("pathLength", "360");
+        trail.setAttribute("stroke-dasharray", (38 + ring % 5 * 13) + " " + (100 + ring % 3 * 17) + " 18 360");
+        trail.style.opacity = String(0.25 + ring % 4 * 0.13);
+        group.appendChild(trail);
+        var star = document.createElementNS(SVG_NS, "circle");
+        star.setAttribute("class", "polar-star");
+        star.setAttribute("cx", String(300 + radius)); star.setAttribute("cy", "300");
+        star.setAttribute("r", ring % 4 === 0 ? "2" : "1.2");
+        star.style.setProperty("--phase", (-ring * 0.7) + "s");
+        group.appendChild(star);
+        orbit.appendChild(group);
+      }
+      polar.appendChild(orbit);
+      var pole = document.createElementNS(SVG_NS, "path");
+      pole.setAttribute("class", "polar-origin");
+      pole.setAttribute("d", "M300 293L301.6 298.4L307 300L301.6 301.6L300 307L298.4 301.6L293 300L298.4 298.4Z");
+      polar.appendChild(pole);
+      sky.appendChild(polar);
+    }
+
     var nav = document.querySelector(".top-nav");
+    if (nav && !nav.querySelector(".theme-toggle")) {
+      var toggle = h("button", { class: "theme-toggle", type: "button" });
+      function updateToggle() {
+        var dark = root.dataset.theme === "dark";
+        toggle.textContent = dark ? "☀" : "☾";
+        toggle.setAttribute("aria-label", dark ? "Switch to day mode" : "Switch to night mode");
+        toggle.setAttribute("aria-pressed", String(dark));
+        toggle.title = dark ? "Day mode" : "Night mode";
+      }
+      function applyTheme() {
+        root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+        try { localStorage.setItem("site-theme", root.dataset.theme); } catch (error) {}
+        document.querySelectorAll("svg[data-sky-icon]").forEach(function (svg) {
+          svg.replaceWith(icon(svg.getAttribute("data-sky-icon")));
+        });
+        updateToggle();
+      }
+      var themeTransition = null;
+      toggle.addEventListener("click", function () {
+        if (themeTransition) return;
+        if (reduceMotion || !document.startViewTransition) {
+          applyTheme();
+          return;
+        }
+        root.classList.add("theme-curtain");
+        themeTransition = document.startViewTransition(applyTheme);
+        themeTransition.finished.catch(function () {}).finally(function () {
+          root.classList.remove("theme-curtain");
+          themeTransition = null;
+        });
+      });
+      updateToggle();
+      nav.appendChild(toggle);
+    }
     if (nav && !nav.querySelector(".nav-flight")) {
       var bird = h("span", { class: "nav-bird" });
       bird.appendChild(icon("bird"));
@@ -474,6 +609,35 @@
     }
     var field = fxField(specs);
     field.classList.add("fx-over");
+    // Continue the night-sky composition down the rendered archive.
+    var extraCount = list.offsetHeight > 1600 ? 2 : 1;
+    for (var j = 0; j < extraCount; j++) {
+      var craft = h("span", { class: "fx fx-satellite satellite-extra", "data-depth": "-0.04" });
+      var satelliteX = j % 2 ? 4 + r() * 26 : 71 + r() * 27;
+      var satelliteY = (j + 0.2 + r() * 0.6) / extraCount * 100;
+      craft.style.cssText = "--x:" + satelliteX.toFixed(1) + "%;--y:" + satelliteY.toFixed(1) +
+        "%;--sat-tilt:" + Math.round(r() * 300 - 150) + "deg;--sat-size:" + (4.5 + r() * 8).toFixed(1) +
+        "rem;--sat-duration:" + (13 + r() * 12).toFixed(1) + "s;--sat-delay:-" + (r() * 20).toFixed(1) + "s";
+      var drift = h("span", { class: "satellite-drift" });
+      drift.appendChild(icon("satellite"));
+      craft.appendChild(drift);
+      field.appendChild(craft);
+      var original = document.querySelector(".polar-trails");
+      if (original && j < 2) {
+        var trails = original.cloneNode(true);
+        trails.classList.add("polar-extra");
+        trails.style.cssText = "left:" + (j % 2 ? "85%" : "12%") + ";top:" + (extraCount === 1 ? 45 : 24 + j * 48) + "%";
+        field.appendChild(trails);
+      }
+    }
+    if (list.matches("[data-item-list], [data-home-catalog*='publication'] .home-list")) {
+      var leftCraft = h("span", { class: "fx fx-satellite satellite-extra", "data-depth": "0.06" });
+      leftCraft.style.cssText = "--x:9%;--y:72%;--sat-tilt:32deg;--sat-size:6.5rem;--sat-duration:21s;--sat-delay:-9s";
+      var leftDrift = h("span", { class: "satellite-drift" });
+      leftDrift.appendChild(icon("satellite"));
+      leftCraft.appendChild(leftDrift);
+      field.appendChild(leftCraft);
+    }
     list.appendChild(field);
     registerLayers(field);
   }
